@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import br.com.ecarrara.jokepresenter.JokePresenter;
 import br.com.ecarrara.jokerepository.JokeRepository;
 
 
@@ -46,8 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        Toast.makeText(this, jokeRepository.getRandomJoke(), Toast.LENGTH_SHORT).show();
+        JokePresenter.presentJoke(this, jokeRepository.getRandomJoke());
     }
-
 
 }

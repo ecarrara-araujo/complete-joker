@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Joke Presenter View -->
+    <dimen name="jokepresenter_view_margin">16dp</dimen>
+
+</resources>

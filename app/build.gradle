@@ -24,13 +24,19 @@ dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Local Modules
     compile project(':jokeRepository')
+    compile project(':jokepresenter')
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    // Support Libs
+    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_LIBS_VERSION"
+
+    // Ads
+    compile "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
+
+    // Instrumentation Tests
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.google.android.gms:play-services-ads:11.4.2'
-
+    
 }
