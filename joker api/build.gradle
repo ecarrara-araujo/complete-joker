@@ -1,0 +1,42 @@
+def projectId = 'completejoker-184117'
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.google.cloud.tools.endpoints-framework-server'
+apply plugin: 'com.google.cloud.tools.appengine'
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.google.endpoints:endpoints-framework:2.0.8'
+    implementation 'com.google.endpoints:endpoints-management-control-appengine:1.0.5'
+    implementation 'com.google.endpoints:endpoints-framework-auth:1.0.5'
+
+    // Local Modules
+    implementation project(':jokeRepository')
+
+}
+
+endpointsServer {
+    hostname = "${projectId}.appspot.com"
+}
+
+appengine {
+
+    run {
+        port = 8080
+    }
+
+    deploy {
+        version = findProperty("appengine.deploy.promote")
+        def promoteProp = findProperty("appengine.deploy.promote")
+        if (promoteProp != null) {
+            promote = new Boolean(promoteProp)
+        }
+    }
+
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
