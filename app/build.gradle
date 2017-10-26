@@ -26,6 +26,19 @@ android {
             initWith debug
             matchingFallbacks = ['debug', 'qa', 'release']
         }
+
+        flavorDimensions "main_application"
+        productFlavors{
+            free {
+                dimension "main_application"
+                applicationId "br.com.ecarrara.completejoker.free"
+            }
+            paid {
+                dimension "main_application"
+                applicationId "br.com.ecarrara.completejoker.paid"
+                matchingFallbacks = ['free']
+            }
+        }
     }
 }
 
@@ -40,7 +53,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_LIBS_VERSION"
 
     // Ads
-    implementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
+    freeImplementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
 
     // Networking Libs
     implementation 'com.google.code.gson:gson:2.8.0'
