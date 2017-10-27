@@ -26,6 +26,7 @@ public class JokeViewerRouterWithAds extends AdListener implements JokeViewerRou
     private void prepareInterstitialAd() {
         this.interstitialAd.setAdUnitId(parentActivity.getString(R.string.interstitial_ad_unit_id));
         this.interstitialAd.setAdListener(this);
+
         prepareNextAd();
     }
 
@@ -34,6 +35,7 @@ public class JokeViewerRouterWithAds extends AdListener implements JokeViewerRou
         jokeToTell = joke;
         this.interstitialAd.show();
     }
+
 
     @Override
     public void onAdFailedToLoad(int i) {

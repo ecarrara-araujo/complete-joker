@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Joke> loader, Joke data) {
         getLoaderManager().destroyLoader(JOKES_LOADER_ID);
+        jokeLoadingProgressIndicator.setVisibility(GONE);
         handleJoke(data);
     }
 
