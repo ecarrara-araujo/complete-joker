@@ -8,7 +8,8 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         ApplicationModule.class,
-        NetworkingModule.class
+        NetworkingModule.class,
+        JokesModule.class
 })
 public interface ApplicationComponent {
 

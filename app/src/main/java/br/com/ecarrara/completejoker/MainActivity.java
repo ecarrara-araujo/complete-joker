@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import br.com.ecarrara.completejoker.di.Injector;
 import br.com.ecarrara.completejoker.repository.Joke;
 import br.com.ecarrara.completejoker.repository.JokeRepository;
-import br.com.ecarrara.jokepresenter.JokePresenter;
+import br.com.ecarrara.completejoker.repository.JokeViewerRouter;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -28,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Inject
     JokeRepository jokeRepository;
+
+    @Inject
+    JokeViewerRouter jokeViewerRouter;
 
     private static final int JOKES_LOADER_ID = 999;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         prepareViews();
         Injector.applicationComponent().inject(this);
+        jokeViewerRouter.init(this);
     }
 
     private void prepareViews() {
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public void tellJoke(View view) {
         displayLoadingState();
-        if(getSupportLoaderManager().getLoader(JOKES_LOADER_ID) == null) {
+        if (getSupportLoaderManager().getLoader(JOKES_LOADER_ID) == null) {
             getSupportLoaderManager().initLoader(JOKES_LOADER_ID, null, this).forceLoad();
         } else {
             getSupportLoaderManager().restartLoader(JOKES_LOADER_ID, null, this).forceLoad();
@@ -111,10 +115,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void handleJoke(Joke data) {
         String jokeToTell = getString(R.string.not_jokes_message);
-        if(data != null) {
+        if (data != null) {
             jokeToTell = data.getJokeDescription();
         }
-        JokePresenter.presentJoke(MainActivity.this, jokeToTell);
+        jokeViewerRouter.displayJoke(jokeToTell);
     }
 
     @Override
