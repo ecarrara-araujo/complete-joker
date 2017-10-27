@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -16,6 +19,9 @@ import br.com.ecarrara.completejoker.di.Injector;
 import br.com.ecarrara.completejoker.repository.Joke;
 import br.com.ecarrara.completejoker.repository.JokeRepository;
 import br.com.ecarrara.jokepresenter.JokePresenter;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Joke> {
@@ -25,11 +31,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int JOKES_LOADER_ID = 999;
 
+    private TextView instructionTextView;
+    private Button jokeRequestButton;
+    private ProgressBar jokeLoadingProgressIndicator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prepareViews();
         Injector.applicationComponent().inject(this);
+    }
+
+    private void prepareViews() {
+        instructionTextView = findViewById(R.id.instructions_text_view);
+        jokeRequestButton = findViewById(R.id.joke_request_button);
+        jokeLoadingProgressIndicator = findViewById(R.id.joke_loading_progress);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayInstructionsState();
     }
 
     @Override
@@ -55,11 +78,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void tellJoke(View view) {
+        displayLoadingState();
         if(getSupportLoaderManager().getLoader(JOKES_LOADER_ID) == null) {
             getSupportLoaderManager().initLoader(JOKES_LOADER_ID, null, this).forceLoad();
         } else {
             getSupportLoaderManager().restartLoader(JOKES_LOADER_ID, null, this).forceLoad();
         }
+    }
+
+    private void displayInstructionsState() {
+        instructionTextView.setVisibility(VISIBLE);
+        jokeRequestButton.setVisibility(VISIBLE);
+        jokeLoadingProgressIndicator.setVisibility(GONE);
+    }
+
+    private void displayLoadingState() {
+        instructionTextView.setVisibility(GONE);
+        jokeRequestButton.setVisibility(GONE);
+        jokeLoadingProgressIndicator.setVisibility(VISIBLE);
     }
 
     @Override
