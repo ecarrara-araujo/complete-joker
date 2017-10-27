@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void tellJoke(View view) {
-        getSupportLoaderManager().initLoader(JOKES_LOADER_ID, null, this);
+        if(getSupportLoaderManager().getLoader(JOKES_LOADER_ID) == null) {
+            getSupportLoaderManager().initLoader(JOKES_LOADER_ID, null, this).forceLoad();
+        } else {
+            getSupportLoaderManager().restartLoader(JOKES_LOADER_ID, null, this).forceLoad();
+        }
     }
 
     @Override
@@ -65,6 +69,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Joke> loader, Joke data) {
+        getLoaderManager().destroyLoader(JOKES_LOADER_ID);
+        handleJoke(data);
+    }
+
+    private void handleJoke(Joke data) {
         String jokeToTell = getString(R.string.not_jokes_message);
         if(data != null) {
             jokeToTell = data.getJokeDescription();
@@ -84,11 +93,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         public GetJokeTask(Context context, JokeRepository jokeRepository) {
             super(context);
             this.jokeRepository = jokeRepository;
-        }
-
-        @Override
-        protected void onStartLoading() {
-            forceLoad();
         }
 
         @Override
