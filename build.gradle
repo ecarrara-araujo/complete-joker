@@ -30,3 +30,20 @@ allprojects {
         mavenCentral()
     }
 }
+
+final E2E_TESTING_TASK_NAME = "End to End Testing"
+
+task endToEndTest {
+    description "Complete Joker App Testing with local Joker Api server"
+    group E2E_TESTING_TASK_NAME
+    dependsOn = [":joker-api:appengineStart", "runConnectedTests"]
+    finalizedBy ":joker-api:appengineStop"
+}
+
+task runConnectedTests {
+    description "Run application tests"
+    group E2E_TESTING_TASK_NAME
+    dependsOn ":app:connectedCheck"
+    shouldRunAfter ":joker-api:appengineStart"
+    doLast { println "Tests have Run!" }
+}
