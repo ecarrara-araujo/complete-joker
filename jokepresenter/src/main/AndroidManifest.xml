@@ -3,7 +3,7 @@
     package="br.com.ecarrara.jokepresenter">
 
     <application>
-        <activity android:name=".JokePresenterView"></activity>
+        <activity android:name=".JokePresenterView"/>
     </application>
 
 </manifest>
