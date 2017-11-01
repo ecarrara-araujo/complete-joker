@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
-        applicationId "com.udacity.gradle.builditbigger"
-        minSdkVersion 16
-        targetSdkVersion 25
+        applicationId "br.com.ecarrara.completejoker"
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -16,15 +16,74 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "JOKES_API_BASE_URL", "\"" + "https://completejoker-184117.appspot.com/_ah/api/joker/v1/" + "\""
+        }
+        debug {
+            buildConfigField "String", "JOKES_API_BASE_URL", "\"" + "http://10.0.2.2:8080/_ah/api/joker/v1/" + "\""
+        }
+        staging {
+            initWith debug
+            matchingFallbacks = ['debug', 'qa', 'release']
+        }
+
+        flavorDimensions "main_application"
+        productFlavors{
+            free {
+                dimension "main_application"
+                applicationId "br.com.ecarrara.completejoker.free"
+            }
+            paid {
+                dimension "main_application"
+                applicationId "br.com.ecarrara.completejoker.paid"
+                matchingFallbacks = ['free']
+            }
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Local Modules
+    implementation project(':jokepresenter')
+
+    // Support Libs
+    implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_LIBS_VERSION"
+
+    // Ads
+    freeImplementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
+
+    // Networking Libs
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+    implementation "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
+
+    // Logging
+    compile 'com.jakewharton.timber:timber:4.5.1'
+
+    // Dependency Injection
+    implementation "com.google.dagger:dagger:$DAGGER_VERSION"
+    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+
+    // Idling Resources
+    implementation "com.android.support.test.espresso:espresso-idling-resource:$ESPRESSO_VERSION"
+
+    // Instrumentation Tests
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.google.android.gms:play-services-ads:9.8.0'
+    androidTestImplementation ("com.android.support.test.espresso:espresso-contrib:$ESPRESSO_VERSION", {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'design'
+        exclude module: 'recyclerview-v7'
+    })
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+    
 }
