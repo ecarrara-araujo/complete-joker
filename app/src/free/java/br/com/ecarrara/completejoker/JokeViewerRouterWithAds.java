@@ -15,6 +15,7 @@ public class JokeViewerRouterWithAds extends AdListener implements JokeViewerRou
     private AppCompatActivity parentActivity;
     private InterstitialAd interstitialAd;
     private String jokeToTell;
+    private boolean adFailedToLoad = false;
 
     @Override
     public void init(AppCompatActivity parent) {
@@ -33,14 +34,18 @@ public class JokeViewerRouterWithAds extends AdListener implements JokeViewerRou
     @Override
     public void displayJoke(String joke) {
         jokeToTell = joke;
-        this.interstitialAd.show();
+        if (!adFailedToLoad) {
+            this.interstitialAd.show();
+        } else {
+            onAdClosed();
+        }
     }
 
 
     @Override
     public void onAdFailedToLoad(int i) {
         Timber.e("Ad failed to load with error code: " + i);
-        JokePresenter.presentJoke(parentActivity, jokeToTell);
+        adFailedToLoad = true;
     }
 
     @Override
